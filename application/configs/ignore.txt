@@ -1,0 +1,10 @@
+.DS_Store
+.gitignore
+README
+.git
+.settings
+application/configs/database.ini
+application/modules/core/controllers/TestController.php
+application/modules/core/views/scripts/test
+public_html/resources/sass/.sass-cache
+public_html/ext
