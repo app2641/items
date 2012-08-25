@@ -105,9 +105,85 @@ class Item
     }
 
     // formデータの取得
-    public function dataLoad ($request)
+    public function dataLoad ($id)
     {
-        var_dump($request);
-        exit();
+        $data = ItemTable::fetchById($id);
+        return array('success' => true, 'data' => $data);
+    }
+
+    /**
+     * @formHandler
+     * formデータupdate
+     */
+    public function dataUpdate ($request)
+    {
+        if (isset($request['is_active'])) {
+            $active = true;
+        } else {
+            $active = false;
+        }
+
+        $sql = 'UPDATE item
+            SET name = :name,
+            description = :des,
+            class = :class,
+            price = :price,
+            exp = :exp,
+            is_active = :active,
+            updated_at = :update
+            WHERE item.id = :id';
+
+        $conn = \Zend_Registry::get('conn');
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(
+            array(
+                'id' => $request['id'],
+                'name' => $request['name'],
+                'des' => $request['description'],
+                'class' => $request['class'],
+                'price' => $request['price'],
+                'exp' => $request['exp'],
+                'active' => $active,
+                'update' => date('Y-m-d H:i:s', time())
+            )
+        );
+
+        return array('success' => true);
+    }
+
+
+    public function generateCsv ()
+    {
+        // tmpフォルダ作成
+        Items\Filesystem::makeTmp();
+
+        $data = ItemTable::fetchAll();
+        $csv = '';
+        $c = ',';
+
+        foreach ($data as $d) {
+            $csv .= $this->_csvEscape($d->id).$c.$this->_csvEscape($d->name).$c.$this->_csvEscape($d->description).$c.
+                $this->_csvEscape($d->class).$c.$this->_csvEscape($d->price).$c.$this->_csvEscape($d->exp).$c.
+                $this->_csvEscape($d->experience).$c.$this->_csvEscape($d->is_active)."\n";
+        }
+
+        $file = '/tmp/items/item.csv';
+        if (file_exists($file)) {
+            unlink($file);
+        }
+
+        touch($file);
+
+        $fp = fopen($file, 'w');
+        @fwrite($fp, $csv, strlen($csv));
+        fclose($fp);
+
+        return array('success' => true, 'name' => 'item');
+    }
+
+    // csv escape
+    private function _csvEscape($string)
+    {
+        return '"'.str_replace('"', '\"', $string).'"';
     }
 }

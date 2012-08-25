@@ -24,12 +24,6 @@ Ext.define('Items.view.data.Window', {
                 xtype: 'data-Tab',
                 type: me.type,
                 data: me.data
-            //}],
-            //buttons: [{
-                //text: 'close',
-                //handler: function () {
-                    //me.close();
-                //}
             }]
         });
 

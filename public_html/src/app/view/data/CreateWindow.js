@@ -1,33 +1,30 @@
 /**
- * Items.view.data.Tab
+ * Items.view.data.CreateWindow
  * @app2641
  */
-Ext.define('Items.view.data.Tab', {
+Ext.define('Items.view.data.CreateWindow', {
 
-    extend: 'Ext.tab.Panel',
+    extend: 'Ext.window.Window',
 
     requires: [
-        'Items.view.data.Description',
         'Items.view.data.Form'
     ],
-
-    alias: 'widget.data-Tab',
 
     initComponent: function () {
         var me = this,
             api = me.buildApi();
 
         Ext.apply(me, {
+            title: 'CreateForm',
+            modal: true,
+            layout: 'fit',
+            border: false,
+            autoScroll: true,
+            width: 700,
+            height: 500,
             items: [{
-                xtype: 'data-Description',
-                type: me.type,
-                data: me.data
-            }, {
                 xtype: 'data-Form',
                 api: api,
-                paramOrder: ['id'],
-                dataload: true,
-                data: me.data,
                 type: me.type
             }]
         });
@@ -46,8 +43,7 @@ Ext.define('Items.view.data.Tab', {
         case 'ic':
         case 'id':
             api = {
-                submit: Item.dataUpdate,
-                load: Item.dataLoad
+                submit: Item.dataCreate
             };
             break;
 
@@ -57,13 +53,12 @@ Ext.define('Items.view.data.Tab', {
         case 'mc':
         case 'md':
             api = {
-                submit: Material.dataUpdate,
-                load: Material.dataLoad
+                submit: Material.dataCreate
             };
             break;
         }
 
         return api;
-    }
+    }   
 
 });

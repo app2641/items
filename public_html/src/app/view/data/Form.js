@@ -35,7 +35,6 @@ Ext.define('Items.view.data.Form', {
         me.callParent(arguments);
 
         if (me.dataload) {
-            console.log(me.data);
             me.getForm().load({
                 params: {
                     id: me.data.id
@@ -117,6 +116,40 @@ Ext.define('Items.view.data.Form', {
             name: 'is_active',
             fieldLabel: 'is_active'
         });
+    },
+
+    submit: function () {
+        var me = this,
+            mask = new Ext.LoadMask(Ext.getBody(), {
+                msg: 'waiting....'
+            });;
+
+        if (me.getForm().isValid()) {
+            mask.show();
+
+            me.getForm().submit({
+                success: function (res) {
+                    mask.hide();
+
+                    Ext.getCmp('data-container-grid').getStore().load({
+                        params: {
+                            value: me.type
+                        }
+                    });
+                    me.up('window').close();
+                },
+                failure: function (res) {
+                    mask.hide();
+
+                    Ext.Msg.show({
+                        title: 'Caution!',
+                        msg: res.msg,
+                        icon: Ext.Msg.ERROR,
+                        buttons: Ext.Msg.OK
+                    });
+                }
+            });
+        }
     }
 
 });

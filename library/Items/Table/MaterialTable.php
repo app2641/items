@@ -4,6 +4,24 @@ namespace Items\Table;
 
 class MaterialTable
 {
+    public static function fetchAll()
+    {
+        try {
+            $conn = \Zend_Registry::get('conn');
+
+            $sql = 'SELECT * FROM material';
+
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll();
+        
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $results;
+    }
+
     public static function fetchAllByClass($class)
     {
         try {

@@ -13,6 +13,7 @@ Ext.define('Items.view.content.Grid', {
             store = me.buildStore();
 
         Ext.apply(me, {
+            id: 'data-container-grid',
             store: store,
             loadMask: true,
             autoScroll: true,

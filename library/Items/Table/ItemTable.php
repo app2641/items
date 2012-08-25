@@ -4,6 +4,24 @@ namespace Items\Table;
 
 class ItemTable
 {
+    public static function fetchAll()
+    {
+        try {
+            $conn = \Zend_Registry::get('conn');
+
+            $sql = 'SELECT * FROM item';
+
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll();
+        
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $results;
+    }
+
     public static function fetchAllByClass($class)
     {
         try {
