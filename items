@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+
+define('DS', DIRECTORY_SEPARATOR);
+define('ROOT_PATH', realpath(dirname(__FILE__)));
+define('APPLICATION_PATH', ROOT_PATH . '/application');
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+
+set_include_path(dirname(__FILE__) . '/library' . PATH_SEPARATOR . get_include_path());
+
+
+use Items\Cmd;
+
+chdir(dirname(__FILE__));
+require_once ('Zend/Loader/Autoloader.php');
+require_once ('Items/Cmd.php');
+
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->setFallbackAutoloader(true);
+
+$cmd = Cmd::getInstance();
+
+if (count($argv) > 1) {
+
+    $cmd->run($argv);
+
+} else {
+   $cmd->cmdList(); 
+}

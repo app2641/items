@@ -1,0 +1,14 @@
+
+dest: public_html/app.js
+
+path: public_html/src/
+
+src:
+
+#singleton
+  - app/Events.js
+  - app/History.js
+
+
+#bootstrap
+  - app/bootstrap.js
