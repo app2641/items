@@ -13,6 +13,45 @@ class Material
         return $data;
     }
 
+
+    /**
+     * @formHandler
+     *  materialレコードの追加
+     */
+    public function dataCreate ($request)
+    {
+        try {
+            if (isset($request['is_active'])) {
+                $active = true;
+            } else {
+                $active = false;
+            }
+
+            $sql = 'INSERT INTO material
+                (name, description, class, price, exp, experience, is_active, created_at)
+                VALUES (:name, :des, :cls, :price, :exp, :ex, :active, :create)';
+
+            $conn = \Zend_Registry::get('conn');
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(
+                array(
+                    'name' => $request['name'],
+                    'des' => $request['description'],
+                    'cls' => $request['class'],
+                    'price' => $request['price'],
+                    'exp' => $request['exp'],
+                    'ex' => false,
+                    'active' => $active,
+                    'create' => date('Y-m-d H:i:s', time())
+                )
+            );
+        
+        } catch (\Exception $e) {
+            return array('success' => false, 'msg' => $e->getMessage());
+        }
+        return array('success' => true);
+    }
+
     // formデータの取得
     public function dataLoad ($id)
     {
@@ -56,6 +95,24 @@ class Material
                 'update' => date('Y-m-d H:i:s', time())
             )
         );
+
+        return array('success' => true);
+    }
+
+    // data削除
+    public function dataDelete ($request)
+    {
+        try {
+            $sql = 'DELETE FROM material
+                WHERE material.id = ?';
+
+            $conn = \Zend_Registry::get('conn');
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array($request->id));
+        
+        } catch (\Exception $e) {
+            return array('success' => false, 'msg' => $e->getMessage());
+        }
 
         return array('success' => true);
     }

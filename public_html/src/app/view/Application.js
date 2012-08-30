@@ -46,6 +46,11 @@ Ext.define('Items.view.Application', {
                         }
                     });
                 }
+            }, '-', {
+                text: 'Memo',
+                handler: function () {
+                    window.open('/index/memo');
+                }
             }, '->', {
                 xtype: 'tbtext',
                 id: 'toalText',

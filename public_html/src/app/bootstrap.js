@@ -29,8 +29,15 @@ Ext.onReady(function () {
     Ext.direct.Manager.addProvider(Items.REMOTING_API);
 
     // application build
-    Ext.create('Items.view.Application', {
-        renderTo: 'contents-container'
-    });
+    if (Ext.get('contents-container')) {
+        Ext.create('Items.view.Application', {
+            renderTo: 'contents-container'
+        });
+
+    } else if (Ext.get('memo-container')) {
+        Ext.create('Items.view.content.Memo', {
+            renderTo: 'memo-container'
+        });
+    }
 });
 

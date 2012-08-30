@@ -64,7 +64,7 @@ Ext.define('Items.view.data.Form', {
             width: 500,
             listeners: {
                 afterrender: function (field) {
-                    field.focus(true, 400);
+                    field.focus(false, 400);
                 }
             }
         });

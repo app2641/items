@@ -6,6 +6,11 @@ class IndexController extends \Zend_Controller_Action
     {
     }
 
+    public function memoAction ()
+    {
+        
+    }
+
     public function downloadcsvAction ()
     {
         $name = $this->getRequest()->getParam('name');

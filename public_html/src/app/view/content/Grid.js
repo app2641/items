@@ -98,6 +98,18 @@ Ext.define('Items.view.content.Grid', {
                     });
                     break;
                 }
+            },
+            itemcontextmenu: function (grid, row, item, index, e) {
+                var menu = Ext.create('Ext.menu.Menu', {
+                    items: [{
+                        text: 'item delete',
+                        handler: function () {
+                            me.itemDelete(row);
+                        }
+                    }]
+                });
+                e.stopEvent();
+                menu.showAt(e.getXY());
             }
         });
     },
@@ -117,6 +129,77 @@ Ext.define('Items.view.content.Grid', {
             listeners: {
                 load: function (store, record) {
                     me.up('panel').down('tbtext').setText('Total: ' + record.length);
+                }
+            }
+        });
+    },
+
+    itemDelete: function (row) {
+        var me = this,
+            type = me.up('panel').down('combo').getValue(),
+            mask = new Ext.LoadMask(Ext.getBody(), {
+                msg: 'waiting....'
+            });
+
+        Ext.Msg.confirm('Confirm', 'sure delete?', function (b) {
+            if (b == 'yes') {
+                mask.show();
+
+                switch (type) {
+                    case 'is':
+                    case 'ia':
+                    case 'ib':
+                    case 'ic':
+                    case 'id':
+                        Item.dataDelete({
+                            id: row.raw.id
+                        }, function (res) {
+                            mask.hide();
+
+                            if (res.success) {
+                                me.getStore.load({
+                                    params: {
+                                        value: type
+                                    }
+                                });
+                    
+                            } else {
+                                Ext.Msg.show({
+                                    title: 'Caution!',
+                                    msg: res.msg,
+                                    icon: Ext.Msg.ERROR,
+                                    buttons: Ext.Msg.OK
+                                });
+                            }
+                        });
+                        break;
+
+                    case 'ms':
+                    case 'ma':
+                    case 'mc':
+                    case 'md':
+                        Material.dataDelete({
+                            id: row.raw.id
+                        }, function (res) {
+                            mask.hide();
+
+                            if (res.success) {
+                                me.getStore.load({
+                                    params: {
+                                        value: type
+                                    }
+                                });
+                    
+                            } else {
+                                Ext.Msg.show({
+                                    title: 'Caution!',
+                                    msg: res.msg,
+                                    icon: Ext.Msg.ERROR,
+                                    buttons: Ext.Msg.OK
+                                });
+                            }
+                        });
+                        break;
                 }
             }
         });
