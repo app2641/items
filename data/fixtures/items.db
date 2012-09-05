@@ -16,6 +16,61 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `chain`
+--
+
+DROP TABLE IF EXISTS `chain`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `chain` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `api_key` varchar(40) DEFAULT NULL,
+  `level` int(11) DEFAULT '1',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `api_key` (`api_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `chain`
+--
+
+LOCK TABLES `chain` WRITE;
+/*!40000 ALTER TABLE `chain` DISABLE KEYS */;
+/*!40000 ALTER TABLE `chain` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `code`
+--
+
+DROP TABLE IF EXISTS `code`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `code` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `material_id` int(11) DEFAULT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  `level` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `code`
+--
+
+LOCK TABLES `code` WRITE;
+/*!40000 ALTER TABLE `code` DISABLE KEYS */;
+/*!40000 ALTER TABLE `code` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `important`
 --
 
@@ -30,7 +85,9 @@ CREATE TABLE `important` (
   `is_active` tinyint(1) DEFAULT '1',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`),
+  KEY `experience` (`experience`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -64,7 +121,8 @@ CREATE TABLE `item` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  KEY `class` (`class`)
+  KEY `class` (`class`),
+  KEY `experience` (`experience`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=ujis;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -89,7 +147,8 @@ CREATE TABLE `level_note` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `level` int(11) NOT NULL,
   `note` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `level` (`level`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -170,4 +229,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-09-04 17:24:04
+-- Dump completed on 2012-09-05 18:34:44
