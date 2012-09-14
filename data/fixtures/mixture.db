@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.24, for osx10.7 (i386)
+-- MySQL dump 10.13  Distrib 5.1.57, for apple-darwin10.7.0 (i386)
 --
--- Host: localhost    Database: items
+-- Host: localhost    Database: mixture
 -- ------------------------------------------------------
--- Server version	5.5.24
+-- Server version	5.1.57-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,7 +30,7 @@ CREATE TABLE `chain` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `api_key` (`api_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +39,7 @@ CREATE TABLE `chain` (
 
 LOCK TABLES `chain` WRITE;
 /*!40000 ALTER TABLE `chain` DISABLE KEYS */;
+INSERT INTO `chain` VALUES (1,'ec6426572c649395461a72018c2ea6a6b7ff3211',1,'2012-09-14 21:47:41','2012-09-14 21:47:41');
 /*!40000 ALTER TABLE `chain` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -229,4 +230,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-09-05 18:34:44
+-- Dump completed on 2012-09-14 22:37:51
