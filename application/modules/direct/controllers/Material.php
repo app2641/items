@@ -28,8 +28,8 @@ class Material
             }
 
             $sql = 'INSERT INTO material
-                (name, description, class, price, exp, experience, is_active, created_at)
-                VALUES (:name, :des, :cls, :price, :exp, :ex, :active, :create)';
+                (name, description, class, rarity, price, exp, experience, is_active, created_at)
+                VALUES (:name, :des, :cls, :rare, :price, :exp, :ex, :active, :create)';
 
             $conn = \Zend_Registry::get('conn');
             $stmt = $conn->prepare($sql);
@@ -38,6 +38,7 @@ class Material
                     'name' => $request['name'],
                     'des' => $request['description'],
                     'cls' => $request['class'],
+                    'rare' => $request['rarity'],
                     'price' => $request['price'],
                     'exp' => $request['exp'],
                     'ex' => false,
@@ -75,6 +76,7 @@ class Material
             SET name = :name,
             description = :des,
             class = :class,
+            rarity = :rare,
             price = :price,
             exp = :exp,
             is_active = :active,
@@ -88,6 +90,7 @@ class Material
                 'id' => $request['id'],
                 'name' => $request['name'],
                 'des' => $request['description'],
+                'rare' => $request['rarity'],
                 'class' => $request['class'],
                 'price' => $request['price'],
                 'exp' => $request['exp'],

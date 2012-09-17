@@ -16,6 +16,7 @@ Ext.define('Items.view.data.Form', {
         me.buildName();
         me.buildDescription();
         me.buildClass();
+        me.buildRarity();
         me.buildPrice();
         me.buildExp();
         me.buildActive();
@@ -64,7 +65,7 @@ Ext.define('Items.view.data.Form', {
             width: 500,
             listeners: {
                 afterrender: function (field) {
-                    field.focus(false, 400);
+                    field.focus(false, 500);
                 }
             }
         });
@@ -87,6 +88,17 @@ Ext.define('Items.view.data.Form', {
             name: 'class',
             fieldLabel: 'Class',
             allowBlank: false
+        });
+    },
+
+    buildRarity: function () {
+        this.items.push({
+            xtype: 'numberfield',
+            name: 'rarity',
+            fieldLabel: 'Rarity',
+            allowBlank: false,
+            minValue: 1,
+            maxValue: 4
         });
     },
 

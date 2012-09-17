@@ -19,7 +19,7 @@ Ext.define('Items.view.data.Window', {
             border: false,
             modal: true,
             width: 700,
-            height: 500,
+            height: 520,
             items: [{
                 xtype: 'data-Tab',
                 type: me.type,

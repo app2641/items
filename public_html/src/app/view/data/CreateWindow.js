@@ -21,7 +21,7 @@ Ext.define('Items.view.data.CreateWindow', {
             border: false,
             autoScroll: true,
             width: 700,
-            height: 500,
+            height: 520,
             items: [{
                 xtype: 'data-Form',
                 api: api,

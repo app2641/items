@@ -29,6 +29,11 @@ Ext.define('Items.view.content.Grid', {
                 sortable: true,
                 flex: 3
             }, {
+                text: 'rarity',
+                dataIndex: 'rarity',
+                sortable: true,
+                flex: 1
+            }, {
                 text: 'price',
                 dataIndex: 'price',
                 sortable: true,
@@ -42,7 +47,7 @@ Ext.define('Items.view.content.Grid', {
                 text: 'active',
                 dataIndex: 'is_active',
                 sortable: true,
-                flex: 2
+                flex: 1
             }],
             height: 570
         });
@@ -118,7 +123,7 @@ Ext.define('Items.view.content.Grid', {
         var me = this;
 
         return Ext.create('Ext.data.Store', {
-            fields: ['id', 'name', 'price', 'exp', 'is_active'],
+            fields: ['id', 'name', 'rarity', 'price', 'exp', 'is_active'],
             proxy: {
                 type: 'direct',
                 directFn: Item.getContents,
