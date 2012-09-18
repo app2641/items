@@ -119,8 +119,8 @@ class Item
             }
 
             $sql = 'INSERT INTO item
-                (name, description, class, price, exp, experience, is_active, created_at)
-                VALUES (:name, :des, :cls, :price, :exp, :ex, :active, :create)';
+                (name, description, class, rarity, price, exp, experience, is_active, created_at)
+                VALUES (:name, :des, :cls, :rare, :price, :exp, :ex, :active, :create)';
 
             $conn = \Zend_Registry::get('conn');
             $stmt = $conn->prepare($sql);
@@ -129,6 +129,7 @@ class Item
                     'name' => $request['name'],
                     'des' => $request['description'],
                     'cls' => $request['class'],
+                    'rare' => $request['rarity'],
                     'price' => $request['price'],
                     'exp' => $request['exp'],
                     'ex' => false,
@@ -167,6 +168,7 @@ class Item
             SET name = :name,
             description = :des,
             class = :class,
+            rarity = :rare,
             price = :price,
             exp = :exp,
             is_active = :active,
@@ -180,6 +182,7 @@ class Item
                 'id' => $request['id'],
                 'name' => $request['name'],
                 'des' => $request['description'],
+                'rare' => $request['rarity'],
                 'class' => $request['class'],
                 'price' => $request['price'],
                 'exp' => $request['exp'],

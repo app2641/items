@@ -65,7 +65,7 @@ Ext.define('Items.view.data.Form', {
             width: 500,
             listeners: {
                 afterrender: function (field) {
-                    field.focus(false, 500);
+                    //field.focus(false, 500);
                 }
             }
         });
@@ -134,7 +134,7 @@ Ext.define('Items.view.data.Form', {
         var me = this,
             mask = new Ext.LoadMask(Ext.getBody(), {
                 msg: 'waiting....'
-            });;
+            });
 
         if (me.getForm().isValid()) {
             mask.show();

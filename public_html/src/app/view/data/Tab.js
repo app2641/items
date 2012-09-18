@@ -19,16 +19,16 @@ Ext.define('Items.view.data.Tab', {
 
         Ext.apply(me, {
             items: [{
-                xtype: 'data-Description',
-                type: me.type,
-                data: me.data
-            }, {
                 xtype: 'data-Form',
                 api: api,
                 paramOrder: ['id'],
                 dataload: true,
                 data: me.data,
                 type: me.type
+            }, {
+                xtype: 'data-Description',
+                type: me.type,
+                data: me.data
             }]
         });
 
