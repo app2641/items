@@ -28,15 +28,23 @@ Ext.onReady(function () {
     // Ext.direct.Providerの設定
     Ext.direct.Manager.addProvider(Items.REMOTING_API);
 
-    // application build
+
+    // アイテムデータ入力画面
     if (Ext.get('contents-container')) {
         Ext.create('Items.view.Application', {
             renderTo: 'contents-container'
         });
 
+    // メモ画面
     } else if (Ext.get('memo-container')) {
         Ext.create('Items.view.content.Memo', {
             renderTo: 'memo-container'
+        });
+
+    // 調合関係設定画面
+    } else if (Ext.get('relation-container')) {
+        Ext.create('Items.view.content.Relation', {
+            renderTo: 'relation-container'
         });
     }
 });

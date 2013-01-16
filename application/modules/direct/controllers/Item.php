@@ -1,7 +1,8 @@
 <?php
 
-use Items\Table\ItemTable,
-    Items\Table\MaterialTable;
+
+use Items\Container,
+    Items\Factory\ModelFactory;
 
 class Item 
 {
@@ -66,18 +67,25 @@ class Item
                 break;
         }
 
+
+        $container = new Container(new ModelFactory);
+
         switch ($table) {
             case 'Item':
-                $data = ItemTable::fetchAllByClass($class);
+                $table = $container->get('ItemTable');
+                $data = $table->fetchAllByClass($class);
                 break;
 
             case 'Material':
-                $data = MaterialTable::fetchAllByClass($class);
+                $table = $container->get('MaterialTable');
+                $data = $table->fetchAllByClass($class);
                 break;
         }
 
         return array('success' => true, 'data' => $data);
     }
+
+
 
     // comboboxのリストを取得する
     public function getComboList ($request)
@@ -96,10 +104,15 @@ class Item
         );
     }
 
+
+
     // ひとつぶんのデータを取得
     public function getData ($request)
     {
-        $data = ItemTable::fetchById($request->id);
+        $container = new Container(new ModelFactory);
+        $table = $container->get('ItemTable');
+
+        $data = $table->fetchById($request->id);
         $data->description = preg_replace("/\n/", '<br />', $data->description);
         return $data;
     }
@@ -118,25 +131,22 @@ class Item
                 $active = false;
             }
 
-            $sql = 'INSERT INTO item
-                (name, description, class, rarity, price, exp, experience, is_active, created_at)
-                VALUES (:name, :des, :cls, :rare, :price, :exp, :ex, :active, :create)';
+            $container = new Container(new ModelFactory);
+            $model = $container->get('ItemModel');
+            $table = $container->get('ItemTable');
 
-            $conn = \Zend_Registry::get('conn');
-            $stmt = $conn->prepare($sql);
-            $stmt->execute(
-                array(
-                    'name' => $request['name'],
-                    'des' => $request['description'],
-                    'cls' => $request['class'],
-                    'rare' => $request['rarity'],
-                    'price' => $request['price'],
-                    'exp' => $request['exp'],
-                    'ex' => false,
-                    'active' => $active,
-                    'create' => date('Y-m-d H:i:s', time())
-                )
-            );
+
+            $params = new \stdClass;
+            $params->name = $request['name'];
+            $params->description = $request['description'];
+            $params->class = $request['class'];
+            $params->rarity = $request['rarity'];
+            $params->exp = $request['exp'];
+            $params->experience = false;
+            $params->is_active = $active;
+            $params->created_at = date('Y-m-d H:i:s');
+
+            $model->insert($params);
         
         } catch (\Exception $e) {
             return array('success' => false, 'msg' => $e->getMessage());
@@ -148,9 +158,15 @@ class Item
     // formデータの取得
     public function dataLoad ($id)
     {
-        $data = ItemTable::fetchById($id);
+        $container = new Container(new ModelFactory);
+        $table = $container->get('ItemTable');
+
+        $data = $table->fetchById($id);
+
         return array('success' => true, 'data' => $data);
     }
+
+
 
     /**
      * @formHandler
@@ -164,46 +180,41 @@ class Item
             $active = false;
         }
 
-        $sql = 'UPDATE item
-            SET name = :name,
-            description = :des,
-            class = :class,
-            rarity = :rare,
-            price = :price,
-            exp = :exp,
-            is_active = :active,
-            updated_at = :update
-            WHERE item.id = :id';
+        $container = new Container(new ModelFactory);
+        $table = $container->get('ItemTable');
+        $model = $container->get('ItemModel');
 
-        $conn = \Zend_Registry::get('conn');
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(
-            array(
-                'id' => $request['id'],
-                'name' => $request['name'],
-                'des' => $request['description'],
-                'rare' => $request['rarity'],
-                'class' => $request['class'],
-                'price' => $request['price'],
-                'exp' => $request['exp'],
-                'active' => $active,
-                'update' => date('Y-m-d H:i:s', time())
-            )
-        );
+        $data = $table->fetchById($request['id']);
+
+        $data->name = $request['name'];
+        $data->description = $request['description'];
+        $data->rarity = $request['rarity'];
+        $data->class = $request['class'];
+        $data->price = $request['price'];
+        $data->exp = $request['exp'];
+        $data->is_active = $active;
+        $data->updated_at = date('Y-m-d H:i:s');
+
+        $model->setRecord($data);
+        $model->update();
 
         return array('success' => true);
     }
+
+
 
     // data削除
     public function dataDelete ($request)
     {
         try {
-            $sql = 'DELETE FROM item
-                WHERE item.id = ?';
+            $container = new Container(new ModelFactory);
+            $table = $container->get('ItemTable');
+            $model = $container->get('ItemModel');
 
-            $conn = \Zend_Registry::get('conn');
-            $stmt = $conn->prepare($sql);
-            $stmt->execute(array($request->id));
+            $data = $table->fetchById($request->id);
+
+            $model->setRecord($data);
+            $model->delete();
         
         } catch (\Exception $e) {
             return array('success' => false, 'msg' => $e->getMessage());
@@ -241,6 +252,7 @@ class Item
 
         return array('success' => true, 'name' => 'item');
     }
+
 
     // csv escape
     private function _csvEscape($string)

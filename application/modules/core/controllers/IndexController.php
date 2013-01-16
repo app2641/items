@@ -2,9 +2,18 @@
 
 class IndexController extends \Zend_Controller_Action
 {
+    // データ入力画面
     public function indexAction()
     {
     }
+
+
+    // 調合関係の設定
+    public function relationAction ()
+    {
+    }
+
+
 
     public function memoAction ()
     {

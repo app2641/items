@@ -23,23 +23,8 @@ Ext.define('Items.view.content.Combo', {
         });
 
         me.callParent(arguments);
-
-        me.initListeners();
     },
 
-    initListeners: function () {
-        var me = this;
-
-        me.on({
-            select: function (combo, record) {
-                var grid = me.up('panel').down('grid');
-
-                if (grid) {
-                    grid.fireEvent('selectContent', record[0]);
-                }
-            }
-        });
-    },
 
     buildStore: function () {
         var me = this;

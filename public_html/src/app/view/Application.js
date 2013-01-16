@@ -27,7 +27,21 @@ Ext.define('Items.view.Application', {
                     }).show();
                 }
             }, '-', {
-                xtype: 'content-Combo'
+                xtype: 'content-Combo',
+                listeners: {
+                    select: function (combo, record) {
+                        var grid = me.down('grid');
+
+                        if (grid) {
+                            grid.fireEvent('selectContent', record[0]);
+                        }
+                    }
+                }
+            }, '-', {
+                text: '調合関係',
+                handler: function () {
+                    location.href = '/index/relation';
+                }
             }, '-', {
                 text: 'MateirlCsv',
                 handler: function () {

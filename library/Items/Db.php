@@ -44,4 +44,24 @@ class Db extends \PDO
             $this->exec("ROLLBACK TO SAVEPOINT {$this->transLevel}save");
         }
     }
+
+
+    // sql処理の実行
+    public function state ($sql, $bind = array())
+    {
+        // stdclassの場合はarrayにキャスト
+        if ($bind instanceof \stdClass) {
+            $bind = (array) $bind;
+        }
+
+        if (! is_array($bind)) {
+            $bind = array($bind);
+        }
+
+
+        $stmt = $this->prepare($sql);
+        $stmt->execute($bind);
+
+        return $stmt;
+    }
 }

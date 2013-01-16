@@ -1,14 +1,19 @@
 <?php
 
-use Items\Table\MaterialTable,
-    Items\Filesystem;
+use Items\Filesystem;
+
+use Items\Container,
+    Items\Factory\ModelFactory;
 
 class Material
 {
+
     // ひとつぶんのデータを取得
     public function getData ($request)
     {
-        $data = MaterialTable::fetchById($request->id);
+        $container = new Container(new ModelFactory);
+        $table = $container->get('MaterialTable');
+        $data = $table->fetchById($request->id);
         $data->description = preg_replace("/\n/", '<br />', $data->description);
         return $data;
     }
@@ -27,38 +32,40 @@ class Material
                 $active = false;
             }
 
-            $sql = 'INSERT INTO material
-                (name, description, class, rarity, price, exp, experience, is_active, created_at)
-                VALUES (:name, :des, :cls, :rare, :price, :exp, :ex, :active, :create)';
+            $container = new Container(new ModelFactory);
+            $model = $container->get('MaterialModel');
 
-            $conn = \Zend_Registry::get('conn');
-            $stmt = $conn->prepare($sql);
-            $stmt->execute(
-                array(
-                    'name' => $request['name'],
-                    'des' => $request['description'],
-                    'cls' => $request['class'],
-                    'rare' => $request['rarity'],
-                    'price' => $request['price'],
-                    'exp' => $request['exp'],
-                    'ex' => false,
-                    'active' => $active,
-                    'create' => date('Y-m-d H:i:s', time())
-                )
-            );
-        
+            $params = new \stdClass;
+            $params->name = $request['name'];
+            $params->description = $request['description'];
+            $params->class = $request['class'];
+            $params->rarity = $request['rarity'];
+            $params->price = $request['price'];
+            $params->exp = $request['exp'];
+            $params->experience = false;
+            $params->is_active = $active;
+            $params->set('created_at', date('Y-m-d H:i:s'));
+            $model->insert($params);
+
         } catch (\Exception $e) {
             return array('success' => false, 'msg' => $e->getMessage());
         }
         return array('success' => true);
     }
 
+
+
     // formデータの取得
     public function dataLoad ($id)
     {
-        $data = MaterialTable::fetchById($id);
+        $container = new Container(new ModelFactory);
+        $table = $container->get('MaterialTable');
+
+        $data = $table->fetchById($id);
         return array('success' => true, 'data' => $data);
     }
+
+
 
     /**
      * @formHandler
@@ -72,53 +79,42 @@ class Material
             $active = false;
         }
 
-        $sql = 'UPDATE material
-            SET name = :name,
-            description = :des,
-            class = :class,
-            rarity = :rare,
-            price = :price,
-            exp = :exp,
-            is_active = :active,
-            updated_at = :update
-            WHERE material.id = :id';
+        $container = new Container(new ModelFactory);
+        $model = $container->get('MaterialModel');
+        $table = $container->get('MaterialTable');
 
-        $conn = \Zend_Registry::get('conn');
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(
-            array(
-                'id' => $request['id'],
-                'name' => $request['name'],
-                'des' => $request['description'],
-                'rare' => $request['rarity'],
-                'class' => $request['class'],
-                'price' => $request['price'],
-                'exp' => $request['exp'],
-                'active' => $active,
-                'update' => date('Y-m-d H:i:s', time())
-            )
-        );
+        $data = $table->fetchById($request['id']);
+        $model->setRecord($data);
+
+        $model->set('name', $request['name']);
+        $model->set('description', $request['description']);
+        $model->set('class', $request['class']);
+        $model->set('rarity', $request['rarity']);
+        $model->set('price', $request['price']);
+        $model->set('exp', $request['exp']);
+        $model->set('is_active', $active);
+        $model->set('updated_at', date('Y-m-d H:i:s'));
+        $model->update();
 
         return array('success' => true);
     }
+
+
 
     // data削除
     public function dataDelete ($request)
     {
-        try {
-            $sql = 'DELETE FROM material
-                WHERE material.id = ?';
+        $container = new Container(new ModelFactory);
+        $table = $container->get('MaterialTable');
+        $model = $container->get('MaterialModel');
 
-            $conn = \Zend_Registry::get('conn');
-            $stmt = $conn->prepare($sql);
-            $stmt->execute(array($request->id));
-        
-        } catch (\Exception $e) {
-            return array('success' => false, 'msg' => $e->getMessage());
-        }
+        $data = $table->fetchById($request->id);
+        $model->setRecord($data);
+        $model->delete();
 
         return array('success' => true);
     }
+
 
     
     // csv書き出し
@@ -151,9 +147,38 @@ class Material
         return array('success' => true, 'name' => 'material');
     }
 
+
     // csv escape
     private function _csvEscape($string)
     {
         return '"'.str_replace('"', '\"', $string).'"';
+    }
+
+
+
+    /**
+     * 素材ItemSelectorに表示するリストデータを取得する
+     *
+     * @author app2641
+     **/
+    public function getItemSelectorData ($request)
+    {
+        $class = strtoupper(substr($request->cls, 1, 1));
+
+        $container = new Container(new ModelFactory);
+        $table = $container->get('MaterialTable');
+
+        $data = $table->fetchAllByClass($class);
+        $results = array();
+
+        // 余計なデータを削除する
+        foreach ($data as $d) {
+            $results[] = array(
+                'id' => $d->id,
+                'name' => $d->name
+            );
+        }
+
+        return $results;
     }
 }
