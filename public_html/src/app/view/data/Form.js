@@ -151,6 +151,7 @@ Ext.define('Items.view.data.Form', {
                     me.up('window').close();
                 },
                 failure: function (res) {
+                    console.log(res);
                     mask.hide();
 
                     Ext.Msg.show({
