@@ -40,7 +40,7 @@ Ext.define('Items.view.Application', {
             }, '-', {
                 text: '調合関係',
                 handler: function () {
-                    location.href = '/index/relation';
+                    window.open('/index/relation');
                 }
             }, '-', {
                 text: 'MateirlCsv',

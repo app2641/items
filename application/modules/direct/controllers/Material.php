@@ -13,8 +13,11 @@ class Material
     {
         $container = new Container(new ModelFactory);
         $table = $container->get('MaterialTable');
+
         $data = $table->fetchById($request->id);
         $data->description = preg_replace("/\n/", '<br />', $data->description);
+        $data->cls = $data->class;
+
         return $data;
     }
 
@@ -44,7 +47,7 @@ class Material
             $params->exp = $request['exp'];
             $params->experience = false;
             $params->is_active = $active;
-            $params->set('created_at', date('Y-m-d H:i:s'));
+            $params->created_at = date('Y-m-d H:i:s');
             $model->insert($params);
 
         } catch (\Exception $e) {

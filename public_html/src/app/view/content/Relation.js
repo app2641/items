@@ -31,17 +31,38 @@ Ext.define('Items.view.content.Relation', {
         var me = this;
 
         me.items.push({
-            xtype: 'content-Combo',
-            listeners: {
-                select: function (combo, record) {
-                    var form = me.down('form');
+            layout: 'hbox',
+            border: false,
+            items: [{
+                xtype: 'content-Combo',
+                style: 'margin-right: 20px',
+                listeners: {
+                    select: function (combo, record) {
+                        var form = me.down('form');
 
-                    if (form) {
-                        // 素材やアイテムのストアをロードする
-                        form.loadStores(record[0]);
+                        if (form) {
+                            // 素材やアイテムのストアをロードする
+                            form.loadStores(record[0]);
+                        }
                     }
                 }
-            }
+            }, {
+                xtype: 'button',
+                text: 'アイテムの再読み込み',
+                handler: function () {
+                    var combo = me.down('content-Combo'),
+                        form = me.down('form'),
+                        record = {
+                            data: {
+                                id: combo.getValue()
+                            }
+                        };
+
+                    if (form) {
+                        form.loadStores(record);
+                    }
+                }
+            }]
         });
     },
 
@@ -50,7 +71,10 @@ Ext.define('Items.view.content.Relation', {
         var me = this;
 
         me.items.push({
-            xtype: 'content-RelationForm'
+            xtype: 'content-RelationForm',
+            api: {
+                submit: Mixin.insert
+            }
         });
     }
 

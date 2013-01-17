@@ -90,18 +90,10 @@ class MaterialTable implements TableInterface
     public final function delete (AbstractModel $model)
     {
         try {
-            $record = $model->getRecord();
-
-            foreach ($record as $key => $val) {
-                if (! in_array($val, $this->fields->getFields())) {
-                    throw new \Exception('invalid field!');
-                }
-            }
-
             $sql = 'DELETE FROM material
-                WHERE material.id = :id';
+                WHERE material.id = ?';
 
-            $this->conn->state($sql, $record);
+            $this->conn->state($sql, $model->get('id'));
         
         } catch (\Exception $e) {
             throw $e;

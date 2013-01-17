@@ -34,9 +34,9 @@ class ItemTable implements TableInterface
             }
 
             $sql = 'INSERT INTO item
-                (name, description, class, price, exp, experience
+                (name, description, class, price, exp, experience,
                     rarity, is_active, created_at) VALUES
-                (:name, :description, :class, :price, :exp, :experience
+                (:name, :description, :class, :price, :exp, :experience,
                     :rarity, :is_active, :created_at)';
 
             $this->conn->state($sql, $params);
@@ -93,7 +93,7 @@ class ItemTable implements TableInterface
     {
         try {
             $sql = 'DELETE FROM item
-                WHERE item.id = :id';
+                WHERE item.id = ?';
 
             $this->conn->state($sql, $model->get('id'));
         
@@ -138,13 +138,13 @@ class ItemTable implements TableInterface
 
 
 
-    public function fetchAllByClass ($class)
+    public function fetchAllByClass ($cls)
     {
         try {
             $sql = 'SELECT * FROM item
                 WHERE item.class = ?';
 
-            $results = $this->conn->state($sql, $class)->fetchAll();
+            $results = $this->conn->state($sql, $cls)->fetchAll();
         
         } catch (\Exception $e) {
             throw $e;

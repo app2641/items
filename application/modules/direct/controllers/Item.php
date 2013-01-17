@@ -114,6 +114,8 @@ class Item
 
         $data = $table->fetchById($request->id);
         $data->description = preg_replace("/\n/", '<br />', $data->description);
+        $data->cls = $data->class;
+
         return $data;
     }
 
@@ -140,6 +142,7 @@ class Item
             $params->name = $request['name'];
             $params->description = $request['description'];
             $params->class = $request['class'];
+            $params->price = $request['price'];
             $params->rarity = $request['rarity'];
             $params->exp = $request['exp'];
             $params->experience = false;
@@ -258,5 +261,32 @@ class Item
     private function _csvEscape($string)
     {
         return '"'.str_replace('"', '\"', $string).'"';
+    }
+
+
+    /**
+     * ItemSelectorに表示するリストデータを取得する
+     *
+     * @author app2641
+     **/
+    public function getItemSelectorData ($request)
+    {
+        $class = strtoupper(substr($request->cls, 1, 1));
+
+        $container = new Container(new ModelFactory);
+        $table = $container->get('ItemTable');
+
+        $data = $table->fetchAllByClass($class);
+        $results = array();
+
+        // 余計なデータを削除する
+        foreach ($data as $d) {
+            $results[] = array(
+                'id' => $d->id,
+                'name' => $d->name
+            );
+        }
+
+        return $results;
     }
 }
