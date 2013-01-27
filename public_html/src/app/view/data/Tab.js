@@ -40,6 +40,13 @@ Ext.define('Items.view.data.Tab', {
             api;
 
         switch (me.type) {
+        case 'im':
+            api = {
+                submit: Important.dataUpdate,
+                load: Important.dataLoad
+            };
+            break;
+
         case 'is':
         case 'ia':
         case 'ib':

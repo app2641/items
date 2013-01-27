@@ -73,6 +73,17 @@ Ext.define('Items.view.content.Grid', {
                     type = me.up('panel').down('combo').getValue();
 
                 switch (type) {
+                case 'im':
+                    Important.getData({
+                        id: id
+                    }, function (res) {
+                        Ext.create('Items.view.data.Window', {
+                            data: res,
+                            type: type
+                        }).show();
+                    });
+                    break;
+
                 case 'is':
                 case 'ia':
                 case 'ib':

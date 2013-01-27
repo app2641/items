@@ -7,12 +7,19 @@ use Items\Container,
 
 class Material
 {
+    protected
+        $container;
+
+    public function __construct ()
+    {
+        $this->container = new Container(new ModelFactory);
+    }
+
 
     // ひとつぶんのデータを取得
     public function getData ($request)
     {
-        $container = new Container(new ModelFactory);
-        $table = $container->get('MaterialTable');
+        $table = $this->container->get('MaterialTable');
 
         $data = $table->fetchById($request->id);
         $data->description = preg_replace("/\n/", '<br />', $data->description);
@@ -35,8 +42,7 @@ class Material
                 $active = false;
             }
 
-            $container = new Container(new ModelFactory);
-            $model = $container->get('MaterialModel');
+            $model = $this->container->get('MaterialModel');
 
             $params = new \stdClass;
             $params->name = $request['name'];
@@ -61,8 +67,7 @@ class Material
     // formデータの取得
     public function dataLoad ($id)
     {
-        $container = new Container(new ModelFactory);
-        $table = $container->get('MaterialTable');
+        $table = $this->container->get('MaterialTable');
 
         $data = $table->fetchById($id);
         return array('success' => true, 'data' => $data);
@@ -82,9 +87,8 @@ class Material
             $active = false;
         }
 
-        $container = new Container(new ModelFactory);
-        $model = $container->get('MaterialModel');
-        $table = $container->get('MaterialTable');
+        $model = $this->container->get('MaterialModel');
+        $table = $this->container->get('MaterialTable');
 
         $data = $table->fetchById($request['id']);
         $model->setRecord($data);
@@ -107,9 +111,8 @@ class Material
     // data削除
     public function dataDelete ($request)
     {
-        $container = new Container(new ModelFactory);
-        $table = $container->get('MaterialTable');
-        $model = $container->get('MaterialModel');
+        $table = $this->container->get('MaterialTable');
+        $model = $this->container->get('MaterialModel');
 
         $data = $table->fetchById($request->id);
         $model->setRecord($data);
@@ -126,7 +129,8 @@ class Material
         // tmpフォルダ作成
         Items\Filesystem::makeTmp();
 
-        $data = MaterialTable::fetchAll();
+        $table = $this->container->get('MaterialTable');
+        $data = $table->fetchAll();
         $csv = '';
         $c = ',';
 
@@ -168,8 +172,7 @@ class Material
     {
         $class = strtoupper(substr($request->cls, 1, 1));
 
-        $container = new Container(new ModelFactory);
-        $table = $container->get('MaterialTable');
+        $table = $this->container->get('MaterialTable');
 
         $data = $table->fetchAllByClass($class);
         $results = array();
