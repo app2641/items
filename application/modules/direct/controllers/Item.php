@@ -6,12 +6,25 @@ use Items\Container,
 
 class Item 
 {
+    protected
+        $container;
+
+    public function __construct ()
+    {
+        $this->container = new Container(new ModelFactory);
+    }
+
+
     // contentgrid combo選択で変化
     public function getContents ($request)
     {
         $value = $request->value;
 
         switch ($value) {
+            case 'im':
+                $table = 'Important';
+                break;
+
             case 'is':
                 $class = 'S';
                 $table = 'Item';
@@ -68,17 +81,32 @@ class Item
         }
 
 
-        $container = new Container(new ModelFactory);
-
         switch ($table) {
             case 'Item':
-                $table = $container->get('ItemTable');
+                $table = $this->container->get('ItemTable');
                 $data = $table->fetchAllByClass($class);
                 break;
 
             case 'Material':
-                $table = $container->get('MaterialTable');
+                $table = $this->container->get('MaterialTable');
                 $data = $table->fetchAllByClass($class);
+                break;
+
+            case 'Important':
+                $table = $this->container->get('ImportantTable');
+                $impotants = $table->fetchAll();
+                $data = array();
+
+                foreach ($impotants as $i) {
+                    $data[] = array(
+                        'id' => $i->id,
+                        'name' => $i->name,
+                        'rarity' => null,
+                        'price' => null,
+                        'exp' => null,
+                        'is_active' => $i->is_active
+                    );
+                }
                 break;
         }
 
@@ -91,6 +119,7 @@ class Item
     public function getComboList ($request)
     {
         return array(
+            array('id' => 'im', 'value' => 'Impotant'),
             array('id' => 'is', 'value' => 'ItemS'),
             array('id' => 'ia', 'value' => 'ItemA'),
             array('id' => 'ib', 'value' => 'ItemB'),
@@ -109,8 +138,7 @@ class Item
     // ひとつぶんのデータを取得
     public function getData ($request)
     {
-        $container = new Container(new ModelFactory);
-        $table = $container->get('ItemTable');
+        $table = $this->container->get('ItemTable');
 
         $data = $table->fetchById($request->id);
         $data->description = preg_replace("/\n/", '<br />', $data->description);
@@ -133,9 +161,8 @@ class Item
                 $active = false;
             }
 
-            $container = new Container(new ModelFactory);
-            $model = $container->get('ItemModel');
-            $table = $container->get('ItemTable');
+            $model = $this->container->get('ItemModel');
+            $table = $this->container->get('ItemTable');
 
 
             $params = new \stdClass;
@@ -161,8 +188,7 @@ class Item
     // formデータの取得
     public function dataLoad ($id)
     {
-        $container = new Container(new ModelFactory);
-        $table = $container->get('ItemTable');
+        $table = $this->container->get('ItemTable');
 
         $data = $table->fetchById($id);
 
@@ -183,9 +209,8 @@ class Item
             $active = false;
         }
 
-        $container = new Container(new ModelFactory);
-        $table = $container->get('ItemTable');
-        $model = $container->get('ItemModel');
+        $table = $this->container->get('ItemTable');
+        $model = $this->container->get('ItemModel');
 
         $data = $table->fetchById($request['id']);
 
@@ -210,9 +235,8 @@ class Item
     public function dataDelete ($request)
     {
         try {
-            $container = new Container(new ModelFactory);
-            $table = $container->get('ItemTable');
-            $model = $container->get('ItemModel');
+            $table = $this->container->get('ItemTable');
+            $model = $this->container->get('ItemModel');
 
             $data = $table->fetchById($request->id);
 
@@ -232,7 +256,8 @@ class Item
         // tmpフォルダ作成
         Items\Filesystem::makeTmp();
 
-        $data = ItemTable::fetchAll();
+        $table = $this->container->get('ItemTable');
+        $data = $table->fetchAll();
         $csv = '';
         $c = ',';
 
@@ -273,7 +298,6 @@ class Item
     {
         $class = strtoupper(substr($request->cls, 1, 1));
 
-        $container = new Container(new ModelFactory);
         $table = $container->get('ItemTable');
 
         $data = $table->fetchAllByClass($class);

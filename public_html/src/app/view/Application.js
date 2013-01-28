@@ -61,6 +61,15 @@ Ext.define('Items.view.Application', {
                     });
                 }
             }, '-', {
+                text: 'ImportantCSV',
+                handler: function () {
+                    Important.generateCsv(function (res) {
+                        if (res.success) {
+                            me.downloadCsv(res);
+                        }
+                    });
+                }
+            }, '-', {
                 text: 'Memo',
                 handler: function () {
                     window.open('/index/memo');
