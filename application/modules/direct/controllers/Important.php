@@ -2,7 +2,8 @@
 
 
 use Items\Container,
-    Items\Factory\ModelFactory;
+    Items\Factory\ModelFactory,
+    Items\Factory\UtilityFactory;
 
 class Important
 {
@@ -92,6 +93,9 @@ class Important
      */
     public function generateCsv ()
     {
+        $container = new Container(new UtilityFactory);
+        $filesystem = $container->get('FileSystem');
+
         // tmpフォルダ作成
         Items\Filesystem::makeTmp();
 

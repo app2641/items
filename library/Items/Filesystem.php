@@ -2,7 +2,7 @@
 
 namespace Items;
 
-class Filesystem
+class FileSystem
 {
     // tmpに専用フォルダを作る
     public static function makeTmp ()
