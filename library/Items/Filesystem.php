@@ -5,7 +5,7 @@ namespace Items;
 class FileSystem
 {
     // tmpに専用フォルダを作る
-    public static function makeTmp ()
+    public function makeTmp ()
     {
         $tmp = '/tmp/Items';
 

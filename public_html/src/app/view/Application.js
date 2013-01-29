@@ -70,6 +70,24 @@ Ext.define('Items.view.Application', {
                     });
                 }
             }, '-', {
+                text: 'MixinCSV',
+                handler: function () {
+                    Mixin.generateCsv(function (res) {
+                        if (res.success) {
+                            me.downloadCsv(res);
+                        }
+                    });
+                }
+            }, '-', {
+                text: 'LevelNoteCSV',
+                handler: function () {
+                    LevelNote.generateCsv(function (res) {
+                        if (res.success) {
+                            me.downloadCsv(res);
+                        }
+                    });
+                }
+            }, '-', {
                 text: 'Memo',
                 handler: function () {
                     window.open('/index/memo');

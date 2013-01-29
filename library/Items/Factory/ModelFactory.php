@@ -5,16 +5,19 @@ namespace Items\Factory;
 
 use Items\Model\Fields\ItemFields,
     Items\Model\Fields\ImportantFields,
+    Items\Model\Fields\LevelNoteFields,
     Items\Model\Fields\MaterialFields,
     Items\Model\Fields\MixinFields;
 
 use Items\Model\ItemModel,
     Items\Model\ImportantModel,
+    Items\Model\LevelNoteModel,
     Items\Model\MaterialModel,
     Items\Model\MixinModel;
 
 use Items\Model\Table\ItemTable,
     Items\Model\Table\ImportantTable,
+    Items\Model\Table\LevelNoteTable,
     Items\Model\Table\MaterialTable,
     Items\Model\Table\MixinTable;
 
@@ -33,6 +36,12 @@ class ModelFactory extends AbstractFactory
     public function buildImportantFields ()
     {
         return new ImportantFields();
+    }
+
+
+    public function buildLevelNoteFields ()
+    {
+        return new LevelNoteFields();
     }
 
 
@@ -65,6 +74,12 @@ class ModelFactory extends AbstractFactory
     }
 
 
+    public function buildLevelNoteModel ()
+    {
+        return new LevelNoteModel();
+    }
+
+
     public function buildMaterialModel ()
     {
         return new MaterialModel();
@@ -91,6 +106,12 @@ class ModelFactory extends AbstractFactory
     public function buildImportantTable ()
     {
         return new ImportantTable();
+    }
+
+
+    public function buildLevelNoteTable ()
+    {
+        return new LevelNoteTable();
     }
 
 

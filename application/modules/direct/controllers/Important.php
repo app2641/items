@@ -94,39 +94,11 @@ class Important
     public function generateCsv ()
     {
         $container = new Container(new UtilityFactory);
-        $filesystem = $container->get('FileSystem');
 
-        // tmpフォルダ作成
-        Items\Filesystem::makeTmp();
-
-        $table = $this->container->get('ImportantTable');
-        $data = $table->fetchAll();
-        $csv = '';
-        $c = ',';
-
-        foreach ($data as $d) {
-            $csv .= $this->_csvEscape($d->id).$c.$this->_csvEscape($d->name).$c.$this->_csvEscape($d->description).$c.
-                $this->_csvEscape($d->experience).$c.$this->_csvEscape($d->is_active).PHP_EOL;
-        }
-
-        $file = '/tmp/items/important.csv';
-        if (file_exists($file)) {
-            unlink($file);
-        }
-
-        touch($file);
-
-        $fp = fopen($file, 'w');
-        @fwrite($fp, $csv, strlen($csv));
-        fclose($fp);
+        // CsvGeneraterを用意
+        $generator = $container->get('ImportantCsvGenerator');
+        $generator->execute();
 
         return array('success' => true, 'name' => 'important');
-    }
-
-
-    // csv escape
-    private function _csvEscape($string)
-    {
-        return '"'.str_replace('"', '\"', $string).'"';
     }
 }

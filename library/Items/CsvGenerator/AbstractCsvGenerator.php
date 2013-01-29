@@ -8,6 +8,9 @@ abstract class AbstractCsvGenerator
     protected
         $columns;
 
+
+    abstract function execute ();
+
     
     /**
      * csvを生成する
@@ -21,7 +24,7 @@ abstract class AbstractCsvGenerator
 
         foreach ($data as $d) {
             foreach ($this->columns as $column) {
-                $csv .= $this->_escapeDubleQuote($data->{$column}).$c;
+                $csv .= $this->_escapeDubleQuote($d->{$column}).$c;
             }
 
             $csv .= PHP_EOL;
@@ -47,7 +50,7 @@ abstract class AbstractCsvGenerator
         chmod($path, 0777);
 
 
-        $fp = fopen($fp, 'w');
+        $fp = fopen($path, 'w');
         @fwrite($fp, $data, strlen($data));
         fclose($fp);
     }

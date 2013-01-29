@@ -3,7 +3,8 @@
 use Items\Filesystem;
 
 use Items\Container,
-    Items\Factory\ModelFactory;
+    Items\Factory\ModelFactory,
+    Items\Factory\UtilityFactory;
 
 class Material
 {
@@ -123,42 +124,18 @@ class Material
 
 
     
-    // csv書き出し
+    /**
+     * csvを生成する
+     *
+     * @author app2641
+     **/
     public function generateCsv ()
     {
-        // tmpフォルダ作成
-        Items\Filesystem::makeTmp();
-
-        $table = $this->container->get('MaterialTable');
-        $data = $table->fetchAll();
-        $csv = '';
-        $c = ',';
-
-        foreach ($data as $d) {
-            $csv .= $this->_csvEscape($d->id).$c.$this->_csvEscape($d->name).$c.$this->_csvEscape($d->description).$c.
-                $this->_csvEscape($d->class).$c.$this->_csvEscape($d->price).$c.$this->_csvEscape($d->exp).$c.
-                $this->_csvEscape($d->experience).$c.$this->_csvEscape($d->is_active)."\n";
-        }
-
-        $file = '/tmp/items/material.csv';
-        if (file_exists($file)) {
-            unlink($file);
-        }
-
-        touch($file);
-
-        $fp = fopen($file, 'w');
-        @fwrite($fp, $csv, strlen($csv));
-        fclose($fp);
+        $container = new Container(new UtilityFactory);
+        $generator = $container->get('MaterialCsvGenerator');
+        $generator->execute();
 
         return array('success' => true, 'name' => 'material');
-    }
-
-
-    // csv escape
-    private function _csvEscape($string)
-    {
-        return '"'.str_replace('"', '\"', $string).'"';
     }
 
 

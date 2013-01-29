@@ -109,4 +109,26 @@ class MixinTable implements TableInterface
 
         return $data;
     }
+
+
+
+    /**
+     * 全データを取得する
+     *
+     * @author app2641
+     **/
+    public function fetchAll ()
+    {
+        try {
+            $sql = 'SELECT * FROM mixin';
+
+            $results = $this->conn
+                ->state($sql)->fetchAll();
+        
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        return $results;
+    }
 }

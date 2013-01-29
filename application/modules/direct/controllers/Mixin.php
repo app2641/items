@@ -1,7 +1,8 @@
 <?php
 
 use Items\Container,
-    Items\Factory\ModelFactory;
+    Items\Factory\ModelFactory,
+    Items\Factory\UtilityFactory;
 
 class Mixin
 {
@@ -88,6 +89,22 @@ class Mixin
         );
 
         return array('success' => true, 'data' => $data);
+    }
+
+
+
+    /**
+     * csvを生成する
+     *
+     * @author app2641
+     **/
+    public function generateCsv ()
+    {
+        $container = new Container(new UtilityFactory);
+        $generator = $container->get('MixinCsvGenerator');
+        $generator->execute();
+
+        return array('success' => true, 'name' => 'mixin');
     }
     
 }
