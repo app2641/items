@@ -86,8 +86,7 @@ Ext.define('Items.view.data.Form', {
         this.items.push({
             xtype: 'textfield',
             name: 'class',
-            fieldLabel: 'Class',
-            allowBlank: false
+            fieldLabel: 'Class'
         });
     },
 
@@ -96,7 +95,6 @@ Ext.define('Items.view.data.Form', {
             xtype: 'numberfield',
             name: 'rarity',
             fieldLabel: 'Rarity',
-            allowBlank: false,
             minValue: 1,
             maxValue: 4
         });
@@ -117,7 +115,6 @@ Ext.define('Items.view.data.Form', {
             xtype: 'textfield',
             name: 'exp',
             fieldLabel: 'Exp',
-            allowBlank: false,
             width: 500
         });
     },
@@ -140,7 +137,7 @@ Ext.define('Items.view.data.Form', {
             mask.show();
 
             me.getForm().submit({
-                success: function (res) {
+                success: function (form, res) {
                     mask.hide();
 
                     Ext.getCmp('data-container-grid').getStore().load({
@@ -150,13 +147,12 @@ Ext.define('Items.view.data.Form', {
                     });
                     me.up('window').close();
                 },
-                failure: function (res) {
-                    console.log(res);
+                failure: function (form, res) {
                     mask.hide();
 
                     Ext.Msg.show({
                         title: 'Caution!',
-                        msg: res.msg,
+                        msg: res.result.msg,
                         icon: Ext.Msg.ERROR,
                         buttons: Ext.Msg.OK
                     });

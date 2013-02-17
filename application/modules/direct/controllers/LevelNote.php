@@ -27,6 +27,6 @@ class LevelNote
         $generator = $container->get('LevelNoteCsvGenerator');
         $generator->execute();
 
-        return array('success' => true, 'name' => 'levelnote');
+        return array('success' => true, 'name' => 'level_note');
     }
 }

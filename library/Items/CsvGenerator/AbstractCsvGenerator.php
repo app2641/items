@@ -24,10 +24,18 @@ abstract class AbstractCsvGenerator
 
         foreach ($data as $d) {
             foreach ($this->columns as $column) {
-                $csv .= $this->_escapeDubleQuote($d->{$column}).$c;
+                if (isset($d->{$column})) {
+                    $csv .= $this->_escapeDubleQuote($d->{$column}).$c;
+
+                } elseif ($column == 'qty') {
+                    $csv .= '"0"'.$c;
+
+                } else {
+                    $csv .= '""'.$c;
+                }
             }
 
-            $csv .= PHP_EOL;
+            $csv = preg_replace('/,$/', PHP_EOL, $csv);
         }
 
         return $csv;

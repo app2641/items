@@ -26,7 +26,6 @@ class Important
         $data->class = null;
         $data->cls = null;
         $data->rarity = null;
-        $data->price = null;
         $data->exp = null;
 
         return $data;
@@ -43,24 +42,30 @@ class Important
      **/
     public function dataUpdate ($request)
     {
-        if (isset($request['is_active'])) {
-            $active = true;
-        } else {
-            $active = false;
+        try {
+            if (isset($request['is_active'])) {
+                $active = true;
+            } else {
+                $active = false;
+            }
+
+            $table = $this->container->get('ImportantTable');
+            $model = $this->container->get('ImportantModel');
+
+            $data = $table->fetchById($request['id']);
+
+            $data->name = $request['name'];
+            $data->description = $request['description'];
+            $data->price = $request['price'];
+            $data->is_active = $active;
+            $data->updated_at = date('Y-m-d H:i:s');
+
+            $model->setRecord($data);
+            $model->update();
+
+        } catch (\Exception $e) {
+            return array('success' => false, 'msg' => $e->getMessage());
         }
-
-        $table = $this->container->get('ImportantTable');
-        $model = $this->container->get('ImportantModel');
-
-        $data = $table->fetchById($request['id']);
-
-        $data->name = $request['name'];
-        $data->description = $request['description'];
-        $data->is_active = $active;
-        $data->updated_at = date('Y-m-d H:i:s');
-
-        $model->setRecord($data);
-        $model->update();
 
         return array('success' => true);
     }
@@ -78,7 +83,6 @@ class Important
         $data = $table->fetchById($id);
 
         $data->class = null;
-        $data->price = null;
         $data->rarity = null;
 
         return array('success' => true, 'data' => $data);

@@ -43,7 +43,7 @@ class ImportantTable implements TableInterface
 
             $sql = 'UPDATE important
                 SET name = :name, description = :description,
-                is_active = :is_active, experience = :experience, 
+                is_active = :is_active, price = :price, experience = :experience,
                 created_at = :created_at, updated_at = :updated_at
                 WHERE id = :id';
 

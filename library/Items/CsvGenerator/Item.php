@@ -10,6 +10,7 @@ use Items\Container,
 class Item extends AbstractCsvGenerator
 {
     protected
+        // csvのカラム
         $columns = array(
             'id',
             'name',
@@ -18,7 +19,10 @@ class Item extends AbstractCsvGenerator
             'price',
             'exp',
             'experience',
-            'is_active'
+            'is_active',
+            'date',
+            'last_date',
+            'qty'
         );
 
 

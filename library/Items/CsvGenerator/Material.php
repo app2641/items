@@ -18,7 +18,10 @@ class Material extends AbstractCsvGenerator
             'price',
             'rarity',
             'experience',
-            'is_active'
+            'is_active',
+            'date',
+            'last_date',
+            'qty'
         );
 
 

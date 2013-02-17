@@ -30,7 +30,7 @@ class LevelNote extends AbstractCsvGenerator
 
             $csv = $this->buildCsv($data);
 
-            $this->generateFile('/tmp/items/levelnote.csv', $csv);
+            $this->generateFile('/tmp/items/level_note.csv', $csv);
 
         } catch (\Exception $e) {
             throw $e;
