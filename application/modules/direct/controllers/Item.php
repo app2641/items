@@ -277,7 +277,7 @@ class Item
     {
         $class = strtoupper(substr($request->cls, 1, 1));
 
-        $table = $container->get('ItemTable');
+        $table = $this->container->get('ItemTable');
 
         $data = $table->fetchAllByClass($class);
         $results = array();
