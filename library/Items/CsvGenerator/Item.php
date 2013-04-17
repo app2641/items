@@ -16,10 +16,10 @@ class Item extends AbstractCsvGenerator
             'name',
             'description',
             'class',
+            'rarity',
             'price',
             'exp',
             'experience',
-            'is_active',
             'date',
             'last_date',
             'qty'

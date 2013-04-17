@@ -14,8 +14,7 @@ class Important extends AbstractCsvGenerator
             'id',
             'name',
             'description',
-            'experience',
-            'is_active'
+            'experience'
         );
 
 
