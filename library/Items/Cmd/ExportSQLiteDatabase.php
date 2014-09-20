@@ -3,7 +3,7 @@
 namespace Items\Cmd;
 require_once dirname(__FILE__) . '/Base/CmdAbstract.php';
 
-class ImportSQLiteCsv extends Base\CmdAbstract
+class ExportSQLiteDatabase extends Base\CmdAbstract
 {
     public function run (array $params)
     {
@@ -147,19 +147,22 @@ class ImportSQLiteCsv extends Base\CmdAbstract
 
             foreach ($results as $result) {
                 $sql = 'insert into mixin
-                    (material1_id, material2_id, item_id) VALUES
-                    (:m1_id, :m2_id, :item_id)';
+                    (material1_id, material2_id, item_id, experience) VALUES
+                    (:m1_id, :m2_id, :item_id, :experience)';
 
                 $bind = array(
                     'm1_id' => $result->material1_id,
                     'm2_id' => $result->material2_id,
-                    'item_id' => $result->item_id
+                    'item_id' => $result->item_id,
+                    'experience' => 0
                 );
 
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute($bind);
             }
 
+
+            $this->log('success!');
 
         } catch (\Exception $e) {
             throw $e;
@@ -169,7 +172,7 @@ class ImportSQLiteCsv extends Base\CmdAbstract
     public function help ()
     {
         /* write help message */
-        $msg = 'data/fixtures/csvをインポートしてmixture_app.sqliteを生成する';
+        $msg = 'Databaseからデータを抽出してdata/fixtues/mixture_app.sqliteを生成する';
 
         return $msg;
     }
